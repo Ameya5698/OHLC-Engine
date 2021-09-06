@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/css/main.css" />
+    <script src="/javascript/main.js"></script>
+</head>
+<body>
+    <div class="navig_bar" id="mainbox">
+        <div class="navig_logo" id="logo">
+            <p>DASHBOARD</p>
+        </div>
+        <div class="navbar__toggle" id="mobile-menu">
+            <span class="bar"></span> <span class="bar"></span>
+            <span class="bar"></span>
+        </div>
+        <button class="logoutbut">
+            <a href="" id="but">logout</a>
+        </button>
+    </div>
+    <div class="mainsec">
+        <div class="userbox">
+            <div class="select">
+                <form name="form1" id="form1" action="/action_page.php">
+                    Symbol:
+                    <br>
+                     <select name="subject" id="subject">
+                        <option value="" selected="selected">Select subject</option>
+                      </select>
+                      <br>
+                </form><br>
+                <div>
+                    <p>Choose start date</p>
+                    <form>
+                        <input type="date" id="start" name="trip-start" value="2018-07-22" min="2000-01-01"
+                            max="2021-12-31">
+                    </form>
+                </div><br>
+                <div>
+                    <p>Choose end date</p>
+                    <form>
+                        <input type="date" id="end" name="trip-end" value="2018-07-22" min="2000-01-01"
+                            max="2021-12-31">
+                    </form>
+                </div><br>
+                <div class="submit">
+                    <input type="button" name="submit_id" id="btn_id" value="Submit by Id" onclick="submit_by_id()"/>
+                </div>
+            </div>
+            <div class="info">
+                <p>fgd</p>
+            </div>
+            
+        </div>
+        <div class="canvas">
+            <p>graph</p>
+        </div>
+        <div class="userselect">
+            <p>userselct</p>
+        </div>
+    </div>
+</body>
+</html>

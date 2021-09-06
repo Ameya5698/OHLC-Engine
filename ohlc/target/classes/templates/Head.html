@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OHLC - ENGINE (Team 1)</title>
+    <link rel="stylesheet" href="/css/main.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1/dist/chart.min.js"></script>
+   
+   
+    <script >
+     
+    
+  
+
+      function processURl()
+      {
+      	var st="http://localhost:8085/stocks/"+document.getElementById("symbol").value + "/"+document.getElementById("start").value + "/"+
+      	document.getElementById("end").value ;
+      	
+      	//console.log(document.getElementById("start"));
+      	console.log(st);
+      	 google.charts.load('current', {'packages':['corechart']});
+         google.charts.setOnLoadCallback(drawChart);
+        function drawChart() {
+        	 
+
+            var xmlhttp=new XMLHttpRequest();
+        //var url="http://localhost:8085/stocks/AAPL/2021-01-04/2021-01-010";
+        var url=st;
+
+        xmlhttp.open("GET",url,true);
+        xmlhttp.send();
+        xmlhttp.onreadystatechange=function(){
+            if(this.readyState==4&&this.status==200)
+            {
+                var data=JSON.parse(this.responseText);
+                //console.log(data);
+                var high_data=data.map(function(elem){
+                    return elem.high;
+                });
+                var low_data=data.map(function(elem){
+                    return elem.low;
+                });
+                var date_data=data.map(function(elem){
+                    return elem.date;
+                });
+
+                var open_data=data.map(function(elem){
+                    return elem.open;
+                });
+
+                var close_data=data.map(function(elem){
+                    return elem.close;
+                });
+
+
+
+                var data = new google.visualization.DataTable();
+                data.addColumn('string', 'year');
+                data.addColumn('number', 'low');
+                data.addColumn('number','open');
+                data.addColumn('number','close')
+                data.addColumn('number','high')
+
+              
+                for(i = 0; i < high_data.length; i++)
+                  data.addRow([date_data[i],low_data[i],open_data[i],close_data[i],high_data[i]]);
+
+
+                //  var data = google.visualization.arrayToDataTable(dataa, true);
+
+            var options = {
+              legend:'none',
+              title:document.getElementById("symbol").value
+
+            };
+
+            var chart = new google.visualization.CandlestickChart(document.getElementById('canvas'));
+
+            chart.draw(data, options);
+                
+                
+            
+            
+            /** code fo other plots...**/
+            const line=document.getElementById('line');
+    const bar=document.getElementById('bar');
+    const bubble=document.getElementById('bubble');
+            
+            
+    		line.addEventListener('click', changeline);
+            bar.addEventListener('click', changebar);
+            bubble.addEventListener('click', changebubble);
+            
+            
+            function changeline()
+            {
+                const update='line';
+                myChart.config.type=update;
+                myChart.update();
+            };
+    
+            function changebar()
+            {
+                const update='bar';
+                myChart.config.type=update;
+                myChart.update();
+            };
+    
+            function changebubble()
+            {
+                const update='bubble';
+                myChart.config.type=update;
+                myChart.update();
+            };
+    
+            var ctx = document.getElementById('canvas2').getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: date_data,//['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                    datasets: [{
+                        label: 'High',
+                        data: high_data,//[12, 50, 3, 5, 2, 3],
+                        backgroundColor: 'transparent',
+                        borderColor: 'red',
+                        borderWidth: 4
+                    },
+                    {
+                        label: 'Low',
+                        data: low_data,//[6, 12, 4, 1, 9, 6],
+                        backgroundColor: 'transparent', 
+                        BorderColor: 'green',
+                        borderWidth: 4
+                    }, 
+                    {
+                        label: 'Close',
+                        data: close_data,//[6, 12, 4, 1, 9, 6],
+                        backgroundColor: 'transparent', 
+                        BorderColor: 'green',
+                        borderWidth: 4
+                    }, 
+                    {
+                        label: 'Open',
+                        data: open_data,//[6, 12, 4, 1, 9, 6],
+                        backgroundColor: 'transparent', 
+                        BorderColor: 'green',
+                        borderWidth: 4
+                    }, 
+                    
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    elements:{
+                        line:{
+                            tension:0
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    },
+                }
+            });
+    
+       
+            
+            
+            
+            
+            
+            
+
+
+
+            }
+        }
+
+
+
+            
+          }
+      	
+      	
+      	
+      }
+      	
+      
+   
+
+    </script>
+</head>
+<body>
+    <div class="navig_bar" id="mainbox">
+        <div class="navig_logo" id="logo">
+            <p>DASHBOARD</p>
+        </div>
+        <div class="navbar__toggle" id="mobile-menu">
+            <span class="bar"></span> <span class="bar"></span>
+            <span class="bar"></span>
+        </div>
+        <button class="logoutbut">
+            <a href="" id="but">Refresh</a>
+        </button>
+    </div>
+    <div class="mainsec">
+        <div class="userbox">
+            <div class="select">
+                
+                <form action="#"></form>
+                    Symbol:
+                    <br>
+                     <select name="Symbol" id="symbol" >
+                        <option value="AAPL" selected="selected">AAPL</option>
+                        <option value="BHP" >BHP</option>
+                         <option value="ABBV" >ABBV</option>
+                          <option value="ABT" >ABT</option>
+                           <option value="ACN" >ACN</option>
+                            <option value="ADBE" >ADBE</option>
+                             <option value="ADSK" >ADSK</option>
+                              <option value="CSCO" >CSCO</option>
+                               <option value="SONY" >SONY</option>
+                                <option value="TSLA" >TSLA</option>
+                                <option value="NFLX" >NFLX</option>
+                                <option value="QCOM" >QCOM</option>
+                                <option value="SNAP" >SNAP</option>
+                                <option value="UPS" >UPS</option>
+                                <option value="SQ" >SQ</option>
+                      </select>
+                      <br>
+                		<br>
+                <div>
+                    <p>Choose start date : </p>
+               
+                        <input type="date" id="start" name="trip-start" value="2021-01-07" min="2000-01-01"
+                            max="2021-12-31" >
+               
+                </div><br>
+                <div>
+                    <p>Choose end date :</p>
+                 
+                        <input type="date" id="end" name="trip-end" value="2021-01-27" min="2000-01-01"
+                            max="2021-12-31" >
+                   
+                </div><br>
+                <div class="submit">
+                    <input type="button" name="submit_id" id="btn_id" value="Get Plot" onclick="processURl()"/>
+                </div>
+            </div>
+             </form>
+            <!-- <div class="info"> -->
+               
+           <!-- </div> --> 
+            
+        </div>
+        <div class="canvas" id="canvas">
+            <p>graph</p>
+        </div>
+        <div class="userselect">
+        	
+            <p>Userselct : </p>
+            <br>
+            
+            <button id="line" type="button" class="btn btn-primary btn-sm">Line Chart</button>
+            <br><br>
+            <button id="bar" type="button" class="btn btn-primary btn-sm">Bar Chart</button>   
+            <br><br>
+            <button id="bubble" type="button" class="btn btn-primary btn-sm">Bubble Chart</button>
+        </div>
+    </div>
+    <div class="chart-container" >
+    
+            <canvas id="canvas2" ></canvas>
+        </div>
+</body>
+</html>
